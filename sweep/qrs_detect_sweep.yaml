@@ -1,0 +1,31 @@
+program: running/run_ui_beat.py
+command:
+  - ${env}
+  - python
+  - ${program}
+  - --config
+  - BeatConfig
+  - --sweep
+project: QRSDetection
+name: uncertainty_qrs_detection_sweep
+method: bayes
+metric:
+  name: val/qrs_acc
+  goal: maximize
+parameters:
+  batch_size:
+    values: [128, 256, 400]
+  alpha_lr:
+    values: [0.0005, 0.001, 0.002]
+  theta_lr:
+    values: [0.0005, 0.001, 0.002]
+  epochs:
+    values: [200]
+  log_interval:
+    values: [10, 20]
+  early_stop_patience:
+    values: [20]
+# early_terminate:
+#   type: hyperband
+#   min_iter: 3
+#   max_iter: 10

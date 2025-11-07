@@ -1,3 +1,8 @@
+wandb/
+qrs_multi_head_log/
+experiments/
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
