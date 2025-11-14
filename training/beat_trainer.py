@@ -14,8 +14,8 @@ import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from ui_beat.models.qrs_model import QRSModel
-from ui_beat.utils.loss import bce_loss_func, cce_loss_func, sim_loss_func
+from UI_Beat.models.qrs_model import QRSModel
+from UI_Beat.utils.loss import bce_loss_func, cce_loss_func, sim_loss_func
 
 
 torch.backends.cudnn.benchmark = True

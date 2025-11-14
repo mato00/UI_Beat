@@ -13,11 +13,11 @@ import torch
 import wandb
 from torch.utils.data import DataLoader
 
-from config.BeatConfig import BeatConfig, load_config
-from dataset.dataset import CPSC2019Dataset, cpsc2019_collate_fn
-from models.multi_head import encoder4qrs, decoder4qrs, phi_qrs
-from models.qrs_model import QRSModel
-from training.beat_trainer import BeatTrainer
+from UI_Beat.config.BeatConfig import BeatConfig, load_config
+from UI_Beat.dataset.pwave_dataset import PWaveSegmentDataset, pwave_collate_fn
+from UI_Beat.models.multi_head import decoder4qrs, encoder4qrs, phi_qrs
+from UI_Beat.models.qrs_model import QRSModel
+from UI_Beat.training.beat_trainer import BeatTrainer
 
 
 def main(args) -> None:
@@ -48,24 +48,28 @@ def main(args) -> None:
     if config.model_save_dir is not None:
         config.model_save_dir.mkdir(parents=True, exist_ok=True)
 
-    dataset_root = Path(config.dataset_root)
-    train_root = dataset_root / "cpsc2019_train"
-    test_root = dataset_root / "cpsc2019_test"
-
-    train_dataset = CPSC2019Dataset(root=train_root)
-    test_dataset = CPSC2019Dataset(root=test_root)
+    dataset_root = Path(config.dataset_root) / "p_wave_dataset"
+    train_dataset = PWaveSegmentDataset(root=dataset_root, split="train")
+    val_dataset = PWaveSegmentDataset(root=dataset_root, split="val")
+    test_dataset = PWaveSegmentDataset(root=dataset_root, split="test")
 
     train_loader = DataLoader(
         train_dataset,
         batch_size=config.batch_size,
         shuffle=True,
-        collate_fn=cpsc2019_collate_fn,
+        collate_fn=pwave_collate_fn,
+    )
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=config.batch_size,
+        shuffle=False,
+        collate_fn=pwave_collate_fn,
     )
     test_loader = DataLoader(
         test_dataset,
         batch_size=config.batch_size,
         shuffle=False,
-        collate_fn=cpsc2019_collate_fn,
+        collate_fn=pwave_collate_fn,
     )
 
     trainer = BeatTrainer(
@@ -96,7 +100,7 @@ def main(args) -> None:
         epochs=config.epochs,
         log_interval=config.log_interval,
         log_callback=log_callback,
-        val_loader=test_loader,
+        val_loader=val_loader,
         best_model_path=best_model_path,
     )
 
@@ -114,7 +118,7 @@ def main(args) -> None:
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Train QRS/PB models with wandb logging.")
+    parser = argparse.ArgumentParser(description="Train models with wandb logging.")
     parser.add_argument("--config", type=str, default="BeatConfig", choices=["BeatConfig"])
     parser.add_argument("--sweep", default=False, action="store_true")
     args = parser.parse_args()

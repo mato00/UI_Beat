@@ -10,10 +10,10 @@ import scipy.io as sio
 import torch
 import wfdb
 
-import ui_beat.dataset.ecg_preprocess as ep
-import ui_beat.utils.qrs_post_process as pp
-from ui_beat.models.multi_head import decoder4qrs, encoder4qrs, phi_qrs
-from ui_beat.models.qrs_model import QRSModel
+import dataset.ecg_preprocess as ep
+import utils.qrs_post_process as pp
+from models.multi_head import decoder4qrs, encoder4qrs, phi_qrs
+from models.qrs_model import QRSModel
 
 np.set_printoptions(threshold=np.inf)
 

@@ -1,0 +1,35 @@
+program: running/run_pwave_train.py
+command:
+  - ${env}
+  - python
+  - ${program}
+  - --config
+  - BeatConfig
+  - --sweep
+project: PWaveDetection
+name: uncertainty_pwave_detection_sweep
+method: bayes
+metric:
+  name: val/qrs_acc
+  goal: maximize
+parameters:
+  project_name:
+    value: "PWave_detection"
+  batch_size:
+    values: [128, 256, 400]
+  alpha_lr:
+    values: [0.0005, 0.001, 0.002]
+  theta_lr:
+    values: [0.0005, 0.001, 0.002]
+  epochs:
+    values: [200]
+  log_interval:
+    values: [10, 20]
+  early_stop_patience:
+    values: [20]
+  log_dir:
+    value: "/export/wxy/uncertainty/UI_Beat/experiments/pwave_detection/logs/"
+# early_terminate:
+#   type: hyperband
+#   min_iter: 3
+#   max_iter: 10

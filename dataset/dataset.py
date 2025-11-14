@@ -14,7 +14,7 @@ from torch.utils.data import Dataset
 from sklearn import preprocessing
 from scipy.io import loadmat
 
-import ui_beat.dataset.ecg_preprocess as ep
+import dataset.ecg_preprocess as ep
 
 
 def _load_mat_variable(path: Path, key: str) -> np.ndarray:
