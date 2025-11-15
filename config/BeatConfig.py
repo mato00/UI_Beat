@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 
 @dataclass
 class BeatConfig:
-    project_name: str = "qrs_detection"
+    project_name: str = "pwave_detection"
     run_name: Optional[str] = None
     offline: bool = False
 
@@ -18,9 +18,9 @@ class BeatConfig:
     model_type: str = "multi_head"
 
     batch_size: int = 400
-    epochs: int = 20
+    epochs: int = 100
     log_interval: int = 10
-    early_stop_patience: int = 20
+    early_stop_patience: int = 10
 
     alpha_lr: float = 1e-3
     beta_lr: float = 1e-3
@@ -28,7 +28,7 @@ class BeatConfig:
     delta_lr: float = 1e-3
 
     dataset_root: Path = field(default_factory=lambda: BASE_DIR / "data")
-    log_dir: Path = field(default_factory=lambda: BASE_DIR / "experiments" / "qrs_detection" / "logs")
+    log_dir: Path = field(default_factory=lambda: BASE_DIR / "experiments" / "pwave_detection" / "logs")
     model_save_dir: Optional[Path] = None
 
     sweep: bool = False
