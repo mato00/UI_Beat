@@ -192,43 +192,4 @@ def feature_extract(ecg):
 
     return ecg_feature
 
-def pan_ecg_process(data, fs):
-    data_e = data.copy()
-    # data_e = pp(data_e)
-    # origin
-    data_e = data_e - lowpass_filter(data_e, 0.5, fs)
-    data_e = data_e - highpass_filter(data_e, 100, fs)
-    data_e = data_e - np.mean(data_e)
-    data_e = preprocessing.scale(data_e)
 
-    return data_e
-
-def ecg_process(data, fs):
-    data_e = data.copy()
-    data_e = pp(data_e)
-    # origin
-    data_e = downsample(data_e, fs, 250)
-    data_e = data_e - lowpass_filter(data_e, 0.5, 250)
-    data_e = data_e - highpass_filter(data_e, 45, 250)
-    data_e = data_e - np.mean(data_e)
-    data_e = preprocessing.scale(data_e)
-    data_e = np.expand_dims(data_e, -1)
-
-    return data_e
-
-def ecg_process_batch(ecg, fs):
-    ecgs = []
-    for single_ecg in ecg:
-        data_e = single_ecg.copy()
-        # origin
-        data_e = downsample(data_e, fs, 250)
-        data_e = data_e - lowpass_filter(data_e, 0.5, 250)
-        data_e = data_e - highpass_filter(data_e, 45, 250)
-        data_e = data_e - np.mean(data_e)
-        data_e = preprocessing.scale(data_e)
-        data_e = np.expand_dims(data_e, -1)
-
-        ecgs.append(data_e)
-    ecgs = np.array(ecgs)
-
-    return ecgs
